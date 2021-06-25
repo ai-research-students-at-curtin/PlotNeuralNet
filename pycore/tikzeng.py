@@ -19,6 +19,9 @@ def to_cor():
 \def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
 \def\FcColor{rgb:blue,5;red,2.5;white,5}
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\DSConvColor{rgb:blue,255}
+\def\ContextnetConvColor{rgb:red,255}
+\def\BottleneckResColor{rgb:green,255}
 \def\SoftmaxColor{rgb:magenta,5;black,7}   
 \def\SumColor{rgb:blue,5;green,15}
 """
@@ -35,19 +38,18 @@ def to_begin():
 
 # layers definition
 
-def to_input( pathfile, to='(-3,0,0)', width=8, height=8, name="temp" ):
+def to_input( pathfile, to='(-3,0,0)', width=8, height=8, name="temp", opacity=1 ):
     return r"""
 \node[canvas is zy plane at x=0] (""" + name + """) at """+ to +""" {\includegraphics[width="""+ str(width)+"cm"+""",height="""+ str(height)+"cm"+"""]{"""+ pathfile +"""}};
 """
 
 # Conv
-def to_Conv( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+def to_Conv( name, s_filer="", n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
     return r"""
 \pic[shift={"""+ offset +"""}] at """+ to +""" 
     {Box={
         name=""" + name +""",
         caption="""+ caption +r""",
-        xlabel={{"""+ str(n_filer) +""", }},
         zlabel="""+ str(s_filer) +""",
         fill=\ConvColor,
         height="""+ str(height) +""",
@@ -56,6 +58,64 @@ def to_Conv( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", widt
         }
     };
 """
+def to_ContextnetConv( name, s_filer="", n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\ContextnetConvColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+# Conv variations
+def to_DSConv( name, s_filer="", n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\DSConvColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+def to_BottleneckRes( name, s_filer="", n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\BottleneckResColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+def to_point(name, offset="(0,0,0)", to="(0,0,0)"):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        fill=\ConvColor,
+        height=0,
+        width=0,
+        depth=0
+        }
+    };
+"""
+
 
 # Conv,Conv,relu
 # Bottleneck
